@@ -38,15 +38,19 @@
       <h1>Deno Broadcast Test</h1>
 
       <hr />
+
+      <h2>Chat</h2>
       <form id="form">
         <input id="input" placeholder="Type your message here" />
         <button type="submit">Send</button>
       </form>
       <section id="messages"></section>
+
       <hr />
 
+      <h2>Env</h2>
       <section>
-        <pre id="headers"></pre>
+        <pre id="env"></pre>
       </section>
     </main>
     <script>
@@ -70,10 +74,10 @@
         messages.prepend(p);
       };
     </script>
+
     <script>
-      const headers = __HEADERS__;
-      document.getElementById("headers").textContent = JSON.stringify(
-        headers,
+      document.getElementById("env").textContent = JSON.stringify(
+        __ENV__,
         null,
         2
       );

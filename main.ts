@@ -9,11 +9,10 @@ Deno.serve(async (req: Request) => {
     }
     if (url.pathname === "/") {
       let html = await Deno.readTextFile("./index.html");
-      const headers: { [key: string]: string } = {};
-      for (const [key, value] of req.headers.entries()) {
-        headers[key] = value;
-      }
-      html = html.replace("__HEADERS__", JSON.stringify(headers, null, 2));
+
+      const env = Deno.env.toObject();
+      html = html.replace("__ENV__", JSON.stringify(env, null, 2));
+
       return new Response(html, { headers: { "Content-Type": "text/html" } });
     }
     return new Response("Not found", { status: 404 });
