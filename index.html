@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Deno Broadcast Channel Test</title>
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/sakura.css/css/sakura.css"
+      type="text/css"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+      #form {
+        display: flex;
+        gap: 1rem;
+      }
+
+      #input {
+        flex-grow: 1;
+        padding: 1rem;
+      }
+
+      button,
+      #input {
+        height: 4rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <div>
+        <a href="https://github.com/tzador/deno-broadcast-channel-test">
+          https://github.com/tzador/deno-broadcast-channel-test
+        </a>
+      </div>
+      <h1>Deno Broadcast Channel Test</h1>
+
+      <hr />
+      <form id="form">
+        <input id="input" placeholder="Type your message here" />
+        <button type="submit">Send</button>
+      </form>
+      <section id="messages"></section>
+      <hr />
+
+      <section>
+        <pre id="headers"></pre>
+      </section>
+    </main>
+    <script>
+      const form = document.getElementById("form");
+      const input = document.getElementById("input");
+      const messages = document.getElementById("messages");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        fetch("/chat", {
+          method: "POST",
+          body: input.value
+        });
+        form.reset();
+      });
+
+      const eventSource = new EventSource("/chat");
+      eventSource.onmessage = (e) => {
+        const p = document.createElement("p");
+        p.textContent = e.data;
+        messages.prepend(p);
+      };
+    </script>
+    <script>
+      const headers = __HEADERS__;
+      document.getElementById("headers").textContent = JSON.stringify(
+        headers,
+        null,
+        2
+      );
+    </script>
+  </body>
+</html>
